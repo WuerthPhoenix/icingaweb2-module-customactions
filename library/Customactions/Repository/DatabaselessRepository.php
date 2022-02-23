@@ -45,7 +45,7 @@ abstract class DatabaselessRepository
         // $this->connectToDb();
         $this->model = $this->getModelNamespace();
         $this->table = $this->model::getTable();
-        $this->searchableProperties = $this->model::getPropertiesForSearch();
+        $this->searchableProperties = $this->model::getColumnsForSearch();
 
         $this->objectType = $this->extractKeyFromClass();
     }
