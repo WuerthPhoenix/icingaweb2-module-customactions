@@ -16,3 +16,12 @@ CREATE TABLE `filter` (
   KEY `fk_filter_category` (`category_id`),
   CONSTRAINT `fk_filter_category` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+
+INSERT INTO `category` (`id`, `name`, `description`) VALUES
+(1, 'neteye_demo', 'NetEye Demo');
+
+
+INSERT INTO `filter` (`id`, `name`, `description`, `filter_host`, `filter_service`, `category_id`) VALUES
+(1, 'neteye host', NULL, 'match("*neteye*", host.name)', NULL, 1);

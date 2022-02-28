@@ -7,6 +7,13 @@
 
 ## Installation
 
+For the configuration, `rpm-functions.sh` and `functions.sh` provided by `neteye_secure_install` will be used.
+
+```bash
+source /usr/share/neteye/secure_install/functions.sh
+source /usr/share/neteye/scripts/rpm-functions.sh
+```
+
 Declaring common variables and creating passwords
 
 ```bash
@@ -19,21 +26,18 @@ MODULE_DIR="/usr/share/icingaweb2/modules"
 TARGET_DIR="${MODULE_DIR}/${MODULE}"
 ```
 
-For the configuration, `rpm-functions.sh` and `functions.sh` provided by `neteye_secure_install` will be used.
-
-```bash
-source /usr/share/neteye/secure_install/functions.sh
-source /usr/share/neteye/scripts/rpm-functions.sh
-```
-
 Clone the repository to your local system and configure it
 
-```bash
-cd ${MODULE_DIR}
-git clone https://Dominik17@bitbucket.org/Dominik17/customactions.git
-chmod 755 customactions
-chown apache:root customactions
-cd customactions/
+```
+git clone https://github.com/WuerthPhoenix/icingaweb2-module-customactions.git
+mv icingaweb2-module-customactions/ ${TARGET_DIR}
+cd ${TARGET_DIR}
+chmod 755 ${TARGET_DIR}
+chown apache:root ${TARGET_DIR}
+```
+
+Put Extra Lib-File:
+```
 mv LocalDateTimeElement.php /usr/share/icingaweb2/modules/ipl/vendor/ipl/html/src/FormElement/
 ```
 
@@ -61,6 +65,7 @@ create_icingaweb2_db_resource ${MODULE} ${DB_PASSWORD}
 icingacli module enable ${MODULE}
 ```
 
+
 Configuring customactions api user
 
 ```bash
@@ -81,8 +86,15 @@ chown icinga:icinga ${API_USER_DIR}/${MODULE}-user.conf
 ```
 
 a) Configuring api user resource in modules config file for api access
+Once created the icinga2 api user, restart the icinga2-master service
 
-```bash
+```
+systemctl restart icinga2-master.service
+
+```
+
+Install the config file:
+
 install -d -o apache -g icingaweb2 -m 770 "${CONFDIR}"
 
 cat <<EOF > ${CONFDIR}/config.ini
