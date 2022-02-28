@@ -29,6 +29,9 @@ TARGET_DIR="${MODULE_DIR}/${MODULE}"
 Clone the repository to your local system and configure it
 
 ```
+Clone from bitbucket:
+git clone https://pb00162@bitbucket.org/siwuerthphoenix/icingaweb2-module-customactions.git
+Clone fomr Git:
 git clone https://github.com/WuerthPhoenix/icingaweb2-module-customactions.git
 mv icingaweb2-module-customactions/ ${TARGET_DIR}
 cd ${TARGET_DIR}
