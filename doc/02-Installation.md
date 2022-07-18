@@ -49,8 +49,10 @@ Creating database and preparing it for access
 ```bash
 cat <<EOF | mysql
 CREATE DATABASE $MODULE;
-GRANT SELECT, INSERT, UPDATE, DELETE, DROP, CREATE VIEW, INDEX, EXECUTE ON ${MODULE}.* TO '${MODULE}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';
-GRANT SELECT, INSERT, UPDATE, DELETE, DROP, CREATE VIEW, INDEX, EXECUTE ON ${MODULE}.* TO '${MODULE}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
+CREATE USER '${MODULE}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';
+CREATE USER '${MODULE}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
+GRANT ALL PRIVILEGES ON ${MODULE}.* TO  TO '${MODULE}'@'localhost' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON ${MODULE}.* TO  TO '${MODULE}'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 EOF
 ```
@@ -88,7 +90,7 @@ chmod 640 ${API_USER_DIR}/${MODULE}-user.conf
 chown icinga:icinga ${API_USER_DIR}/${MODULE}-user.conf
 ```
 
-a) Configuring api user resource in modules config file for api access
+Configuring api user resource in modules config file for api access
 Once created the icinga2 api user, restart the icinga2-master service
 
 ```
@@ -97,25 +99,30 @@ systemctl restart icinga2-master.service
 ```
 
 Install the config file:
-
+```
 install -d -o apache -g icingaweb2 -m 770 "${CONFDIR}"
+cd ${CONFDIR}
+touch config.ini
+```
 
-cat <<EOF > ${CONFDIR}/config.ini
+Copy the following content into config.ini:
+```
 [apiuser]
 host = "icinga2-master.neteyelocal"
 port = "5665"
 username = "${MODULE}"
 password = "${API_PASSWORD}"
 EOF
+```
+Currently you have to use the username and password of the director-api-user which is located in the file `/neteye/shared/icinga2/conf/icinga2/conf.d/director-user.conf`.
 
-chmod 660 ${CONFDIR}/config.ini
+I'm not sure if the chown and chmod commands are neccessary.
+```bash
+chmod 660 ${CONFDIR}/config.ini;
 chown apache:icingaweb2 ${CONFDIR}/config.ini
 ```
 
-b) Currently you have to make step 9 with username and password of the director-api-user in the file `/neteye/shared/icinga2/conf/icinga2/conf.d/director-user.conf`. Also I'm not sure if the chown and chmod commands are neccessary.
-
 Restart the php-fpm service and check if is still running
-
 ```bash
 systemctl restart php-fpm.service
 systemctl status php-fpm.service
