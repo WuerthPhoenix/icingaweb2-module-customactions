@@ -1,3 +1,4 @@
 Name: Customactions
 Version: 1.2
 Description: Graphical User Interface for Custom Actions
+Depends: neteye, auditlog
