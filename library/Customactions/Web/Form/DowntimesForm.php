@@ -200,11 +200,11 @@ class DowntimesForm extends CustomactionsForm
     protected function setSelectedFilters()
     {
         $values = $this->getValues();
-
+        
         $values = array_filter(
             $values,
             function ($value, $key) {
-                return $value == '1' && strpos($key, 'filter') !== false;
+                return $value == 'y' && strpos($key, 'filter') !== false;
             },
             ARRAY_FILTER_USE_BOTH
         );
