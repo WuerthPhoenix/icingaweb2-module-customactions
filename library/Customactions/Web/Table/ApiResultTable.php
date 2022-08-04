@@ -3,13 +3,13 @@
 namespace Icinga\Module\Customactions\Web\Table;
 
 use Icinga\Module\Neteye\Web\Table\BaseTable;
-use Icinga\Module\Customactions\Repository\ApiErrorResultRepository;
+use Icinga\Module\Customactions\Repository\ApiResultRepository;
 
-class ApiErrorResultTable extends BaseTable
+class ApiResultTable extends BaseTable
 {
     public function __construct($models = [])
     {
-        $repo = new ApiErrorResultRepository();
+        $repo = new ApiResultRepository();
         $models = $repo->findAll();
         parent::__construct($models);
     }

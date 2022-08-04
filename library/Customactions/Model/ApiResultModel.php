@@ -5,7 +5,7 @@ namespace Icinga\Module\Customactions\Model;
 
 use Icinga\Module\Neteye\Model\BaseModel;
 
-class ApiErrorResultModel extends BaseModel
+class ApiResultModel extends BaseModel
 {
 
     /**
