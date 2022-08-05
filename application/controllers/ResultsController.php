@@ -38,7 +38,7 @@ class ResultsController extends BaseController
         if (!empty($results)) {
             $this->content()->add(Html::tag('p', [
                 'class' => 'information'
-            ], Translator::translate('Downtime(s) with return code 200 successfully planned', "customactions")));
+            ], Translator::translate('Downtime(s) with staus code 200 successfully planned', "customactions")));
 
             $this->content()->add(new ApiResultTable());
 
