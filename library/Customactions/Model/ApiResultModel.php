@@ -36,11 +36,11 @@ class ApiResultModel extends BaseModel
     private $status;
 
     /**
-     * @var int $error
+     * @var int $statusCode
      * @table_column
-     * @translate_label Error
+     * @translate_label StatusCode
      */
-    private $error;
+    private $statusCode;
 
 
     /**
@@ -50,7 +50,7 @@ class ApiResultModel extends BaseModel
      * @param string $type
      * @param string $filter
      * @param string $status
-     * @param int $error
+     * @param int $statusCode
      * @throws \Exception
      */
     public function __construct(
@@ -59,14 +59,14 @@ class ApiResultModel extends BaseModel
         string $type,
         string $filter,
         string $status,
-        int $error
+        int $statusCode
     ) {
         $this->setId($id);
         $this->setName($name);
         $this->setType($type);
         $this->setFilter($filter);
         $this->setStatus($status);
-        $this->setError($error);
+        $this->setStatusCode($statusCode);
     }
 
     /**
@@ -136,16 +136,16 @@ class ApiResultModel extends BaseModel
     /**
      * @return string
      */
-    public function getError(): string
+    public function getStatusCode(): string
     {
-        return $this->error;
+        return $this->statusCode;
     }
 
     /**
-     * @param string $error
+     * @param string $statusCode
      */
-    public function setError(string $error = null): void
+    public function setStatusCode(string $statusCode = null): void
     {
-        $this->error = $error;
+        $this->statusCode = $statusCode;
     }
 }
