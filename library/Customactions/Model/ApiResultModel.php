@@ -29,11 +29,11 @@ class ApiResultModel extends BaseModel
     private $filter;
 
     /**
-     * @var string $status
+     * @var string $message
      * @table_column
-     * @translate_label Status
+     * @translate_label Message
      */
-    private $status;
+    private $message;
 
     /**
      * @var int $statusCode
@@ -49,7 +49,7 @@ class ApiResultModel extends BaseModel
      * @param string $name
      * @param string $type
      * @param string $filter
-     * @param string $status
+     * @param string $message
      * @param int $statusCode
      * @throws \Exception
      */
@@ -58,14 +58,14 @@ class ApiResultModel extends BaseModel
         string $name,
         string $type,
         string $filter,
-        string $status,
+        string $message,
         int $statusCode
     ) {
         $this->setId($id);
         $this->setName($name);
         $this->setType($type);
         $this->setFilter($filter);
-        $this->setStatus($status);
+        $this->setMessage($message);
         $this->setStatusCode($statusCode);
     }
 
@@ -120,17 +120,17 @@ class ApiResultModel extends BaseModel
     /**
      * @return string
      */
-    public function getStatus(): string
+    public function getMessage(): string
     {
         return $this->status;
     }
 
     /**
-     * @param string $status
+     * @param string $message
      */
-    public function setStatus(string $status = null): void
+    public function setMessage(string $message= null): void
     {
-        $this->status = $status;
+        $this->message= $message;
     }
 
     /**

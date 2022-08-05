@@ -388,7 +388,7 @@ class DowntimesForm extends CustomactionsForm
 
                         $tableResult[] = $result;
 
-                        if ($modelObject->getError() >= 400)
+                        if ($modelObject->getStausCode() >= 400)
                             $errors = true;
 
                     } catch (\Exception $e) {
