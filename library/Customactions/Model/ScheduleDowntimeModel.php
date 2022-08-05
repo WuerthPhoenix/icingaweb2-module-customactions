@@ -33,19 +33,19 @@ class ScheduleDowntimeModel extends BaseModel
 
     /**
      * @db_column
-     * @var string $status
+     * @var string $message
      * @table_column
      * @translate_label Status
      */
-    private $status;
+    private $message;
 
     /**
      * @db_column
-     * @var int $error
+     * @var int $statusCode
      * @table_column
-     * @translate_label Error
+     * @translate_label statusCode
      */
-    private $error;
+    private $statusCode;
 
 
     /**
@@ -54,8 +54,8 @@ class ScheduleDowntimeModel extends BaseModel
      * @param string $name
      * @param string $type
      * @param string $body
-     * @param string $status
-     * @param int $error
+     * @param string $message
+     * @param int $statusCode
      * @throws \Exception
      */
     public function __construct(
@@ -63,15 +63,15 @@ class ScheduleDowntimeModel extends BaseModel
         string $name,
         string $type,
         string $body,
-        string $status,
-        int $error
+        string $message,
+        int $statusCode
     ) {
         $this->setId($id);
         $this->setName($name);
         $this->setType($type);
         $this->setBody($body);
-        $this->setStatus($status);
-        $this->setError($error);
+        $this->setMessage($message);
+        $this->setStatusCode($statusCode);
     }
 
     /**
@@ -125,32 +125,32 @@ class ScheduleDowntimeModel extends BaseModel
     /**
      * @return string
      */
-    public function getStatus(): string
+    public function getMessage(): string
     {
         return $this->status;
     }
 
     /**
-     * @param string $status
+     * @param string $message
      */
-    public function setStatus(string $status = null): void
+    public function setMessage(string $message = null): void
     {
-        $this->status = $status;
+        $this->status = $message;
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getError(): string
+    public function getStatusCode(): int
     {
-        return $this->error;
+        return $this->statusCode;
     }
 
     /**
-     * @param string $error
+     * @param int $statusCode
      */
-    public function setError(string $error = null): void
+    public function setStatusCode(string $statusCode = null): void
     {
-        $this->error = $error;
+        $this->statusCode = $statusCode;
     }
 }

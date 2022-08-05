@@ -134,17 +134,17 @@ class ApiResultModel extends BaseModel
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getStatusCode(): string
+    public function getStatusCode(): int
     {
         return $this->statusCode;
     }
 
     /**
-     * @param string $statusCode
+     * @param int $statusCode
      */
-    public function setStatusCode(string $statusCode = null): void
+    public function setStatusCode(int $statusCode = null): void
     {
         $this->statusCode = $statusCode;
     }
