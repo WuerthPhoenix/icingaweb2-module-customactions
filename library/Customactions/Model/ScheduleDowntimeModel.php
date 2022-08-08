@@ -127,7 +127,7 @@ class ScheduleDowntimeModel extends BaseModel
      */
     public function getMessage(): string
     {
-        return $this->status;
+        return $this->message;
     }
 
     /**
@@ -135,7 +135,7 @@ class ScheduleDowntimeModel extends BaseModel
      */
     public function setMessage(string $message = null): void
     {
-        $this->status = $message;
+        $this->message = $message;
     }
 
     /**

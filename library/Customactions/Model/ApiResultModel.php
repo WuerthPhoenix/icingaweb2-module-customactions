@@ -122,7 +122,7 @@ class ApiResultModel extends BaseModel
      */
     public function getMessage(): string
     {
-        return $this->status;
+        return $this->message;
     }
 
     /**
