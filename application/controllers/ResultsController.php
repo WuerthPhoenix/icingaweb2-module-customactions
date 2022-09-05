@@ -2,10 +2,10 @@
 
 namespace Icinga\Module\Customactions\Controllers;
 
-use Icinga\Module\Customactions\Repository\ApiErrorResultRepository;
+use Icinga\Module\Customactions\Repository\ApiResultRepository;
 use Icinga\Module\Neteye\BaseController;
 use Icinga\Module\Customactions\Utils\PermissionUtil;
-use Icinga\Module\Customactions\Web\Table\ApiErrorResultTable;
+use Icinga\Module\Customactions\Web\Table\ApiResultTable;
 use Icinga\Util\Translator;
 use Icinga\Module\Customactions\Web\Components\Organisms\QuickLinks\ReturnItemBar;
 use Icinga\Module\Neteye\Web\Components\Organisms\TabLinks\SingleTab;
@@ -32,15 +32,20 @@ class ResultsController extends BaseController
             'class' => 'information'
         ], $this->translate('Result')));
 
-        $repo = new ApiErrorResultRepository();
-        $models = $repo->findAll();
+        $repo = new ApiResultRepository();
+        $results = $repo->findAll();
 
-        if (empty($models)) {
+        if (!empty($results)) {
             $this->content()->add(Html::tag('p', [
                 'class' => 'information'
-            ], Translator::translate('Last downtime(s) successfully planned', "customactions")));
-        } else {
-            $this->content()->add(new ApiErrorResultTable());
+            ], Translator::translate('Downtime(s) with staus code 200 successfully planned', "customactions")));
+
+            $this->content()->add(new ApiResultTable());
+
+        }else{
+            $this->content()->add(Html::tag('p', [
+                'class' => 'information'
+            ], Translator::translate('An unknown error occurred', "customactions")));
         }
     }
 

@@ -5,7 +5,7 @@ namespace Icinga\Module\Customactions\Model;
 
 use Icinga\Module\Neteye\Model\BaseModel;
 
-class ApiErrorResultModel extends BaseModel
+class ApiResultModel extends BaseModel
 {
 
     /**
@@ -29,18 +29,18 @@ class ApiErrorResultModel extends BaseModel
     private $filter;
 
     /**
-     * @var string $status
+     * @var string $message
      * @table_column
-     * @translate_label Status
+     * @translate_label Message
      */
-    private $status;
+    private $message;
 
     /**
-     * @var int $error
+     * @var int $statusCode
      * @table_column
-     * @translate_label Error
+     * @translate_label StatusCode
      */
-    private $error;
+    private $statusCode;
 
 
     /**
@@ -49,8 +49,8 @@ class ApiErrorResultModel extends BaseModel
      * @param string $name
      * @param string $type
      * @param string $filter
-     * @param string $status
-     * @param int $error
+     * @param string $message
+     * @param int $statusCode
      * @throws \Exception
      */
     public function __construct(
@@ -58,15 +58,15 @@ class ApiErrorResultModel extends BaseModel
         string $name,
         string $type,
         string $filter,
-        string $status,
-        int $error
+        string $message,
+        int $statusCode
     ) {
         $this->setId($id);
         $this->setName($name);
         $this->setType($type);
         $this->setFilter($filter);
-        $this->setStatus($status);
-        $this->setError($error);
+        $this->setMessage($message);
+        $this->setStatusCode($statusCode);
     }
 
     /**
@@ -120,32 +120,32 @@ class ApiErrorResultModel extends BaseModel
     /**
      * @return string
      */
-    public function getStatus(): string
+    public function getMessage(): string
     {
-        return $this->status;
+        return $this->message;
     }
 
     /**
-     * @param string $status
+     * @param string $message
      */
-    public function setStatus(string $status = null): void
+    public function setMessage(string $message= null): void
     {
-        $this->status = $status;
+        $this->message= $message;
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getError(): string
+    public function getStatusCode(): int
     {
-        return $this->error;
+        return $this->statusCode;
     }
 
     /**
-     * @param string $error
+     * @param int $statusCode
      */
-    public function setError(string $error = null): void
+    public function setStatusCode(int $statusCode = null): void
     {
-        $this->error = $error;
+        $this->statusCode = $statusCode;
     }
 }

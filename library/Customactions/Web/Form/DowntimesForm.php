@@ -204,7 +204,7 @@ class DowntimesForm extends CustomactionsForm
         $values = array_filter(
             $values,
             function ($value, $key) {
-                return $value == '1' && strpos($key, 'filter') !== false;
+                return $value == 'y' && strpos($key, 'filter') !== false;
             },
             ARRAY_FILTER_USE_BOTH
         );
@@ -370,7 +370,8 @@ class DowntimesForm extends CustomactionsForm
             return false;
         }
 
-        $errors = [];
+        $tableResult = []; //will contain the results of the filter application/execution
+        $errors = false;//error flag
         $id = 0;
 
         foreach ($this->filters as $name => $filter) {
@@ -385,8 +386,11 @@ class DowntimesForm extends CustomactionsForm
 
                         $this->scheduleDowntimeRepository->add($modelObject);
 
-                        if ($modelObject->getError() >= 400)
-                            $errors[] = $result;
+                        $tableResult[] = $result;
+
+                        if ($modelObject->getStatusCode() >= 400)
+                            $errors = true;
+
                     } catch (\Exception $e) {
                         Notification::error($e->getMessage());
                         return;
@@ -394,12 +398,24 @@ class DowntimesForm extends CustomactionsForm
                 }
             }
         }
-        if (empty($errors)) {
+
+        if (!$errors) {
             Notification::success(Translator::translate('All downtimes planned successfully', "customaction"));
         } else {
             Notification::error(Translator::translate('Error while planning downtimes', "customaction"));
         }
-        SessionUtil::storeDowntimeResults($errors);
+
+        //sorts the results so that the filters that raised an exception/error are displayed at the top of the table
+        usort($tableResult, function($a, $b){
+            if($a[5] == $b[5])
+                return 0;
+
+            return ($a[5] < $b[5])? 1 : -1;
+        });
+
+        //this stored value will be used by the ApiResultsRepository to generate the results table
+        SessionUtil::storeDowntimeResults($tableResult);
+
         $this->redirectOnSuccess();
     }
 
@@ -420,7 +436,7 @@ class DowntimesForm extends CustomactionsForm
         ];
 
         if ($objectType == DowntimePlannerUtil::TYPE_HOST) {
-            $requestBody['all_services'] = !is_null($this->getValue("all_services"));
+            $requestBody['all_services'] = ($this->getValue("all_services") == 'n')? false: true;
             $requestBody['child_options'] = $this->getValue("child_hosts");
         }
 
