@@ -204,7 +204,7 @@ class DowntimesForm extends CustomactionsForm
         $values = array_filter(
             $values,
             function ($value, $key) {
-                return $value == 'on' && strpos($key, 'filter') !== false;
+                return $value == 'y' && strpos($key, 'filter') !== false;
             },
             ARRAY_FILTER_USE_BOTH
         );
@@ -436,7 +436,7 @@ class DowntimesForm extends CustomactionsForm
         ];
 
         if ($objectType == DowntimePlannerUtil::TYPE_HOST) {
-            $requestBody['all_services'] = ($this->getValue("all_services") == null)? false: true;
+            $requestBody['all_services'] = ($this->getValue("all_services") == 'n')? false: true;
             $requestBody['child_options'] = $this->getValue("child_hosts");
         }
 
