@@ -1,4 +1,4 @@
-# Installation
+ Installation
 
 ## Requirements
 * Neteye (>= 4.15)
@@ -29,10 +29,14 @@ TARGET_DIR="${MODULE_DIR}/${MODULE}"
 Clone the repository to your local system and configure it
 
 ```
-Clone from bitbucket:
-git clone https://pb00162@bitbucket.org/siwuerthphoenix/icingaweb2-module-customactions.git
+git clone https://<username>@bitbucket.org/siwuerthphoenix/icingaweb2-module-customactions.git
+```
 Clone fomr Git:
+```
 git clone https://github.com/WuerthPhoenix/icingaweb2-module-customactions.git
+```
+Place into icingaweb2 modules folder:
+```
 mv icingaweb2-module-customactions/ ${TARGET_DIR}
 cd ${TARGET_DIR}
 chmod 755 ${TARGET_DIR}
@@ -41,7 +45,7 @@ chown apache:root ${TARGET_DIR}
 
 Put Extra Lib-File:
 ```
-mv LocalDateTimeElement.php /usr/share/icingaweb2/modules/ipl/vendor/ipl/html/src/FormElement/
+cp LocalDateTimeElement.php /usr/share/icingaweb2/modules/ipl/vendor/ipl/html/src/FormElement/
 ```
 
 Creating database and preparing it for access
@@ -93,31 +97,29 @@ chown icinga:icinga ${API_USER_DIR}/${MODULE}-user.conf
 Configuring api user resource in modules config file for api access
 Once created the icinga2 api user, restart the icinga2-master service
 
+In case of standalone:
 ```
 systemctl restart icinga2-master.service
+```
 
+In case of cluster:
+```bash
+pcs resource restart icinga2-master
 ```
 
 Install the config file:
-```
+```bash
 install -d -o apache -g icingaweb2 -m 770 "${CONFDIR}"
 cd ${CONFDIR}
 touch config.ini
-```
-
-Copy the following content into config.ini:
-```
+cat <<EOF > ${CONFDIR}/config.ini
 [apiuser]
 host = "icinga2-master.neteyelocal"
 port = "5665"
 username = "${MODULE}"
 password = "${API_PASSWORD}"
 EOF
-```
-Currently you have to use the username and password of the director-api-user which is located in the file `/neteye/shared/icinga2/conf/icinga2/conf.d/director-user.conf`.
 
-I'm not sure if the chown and chmod commands are neccessary.
-```bash
 chmod 660 ${CONFDIR}/config.ini;
 chown apache:icingaweb2 ${CONFDIR}/config.ini
 ```
@@ -126,6 +128,33 @@ Restart the php-fpm service and check if is still running
 ```bash
 systemctl restart php-fpm.service
 systemctl status php-fpm.service
+```
+
+## Bug warninig
+
+Currently a bug present in  neteye 4.25 where the value of the checkboxes is always set to checked.
+To fix this issue, go to " /usr/share/icingaweb2/modules/neteye/library/Neteye/Web/Form/Element/BaseCheckboxElement.php " and replace its content with 
+
+```bash
+<?php
+
+namespace Icinga\Module\Neteye\Web\Form\Element;
+
+use ipl\Html\FormElement\CheckboxElement;
+
+class BaseCheckboxElement extends CheckboxElement
+{
+    use BaseInputElement;
+    
+    public function setValue($value)
+    {
+        $this->value = $value;
+        // To validate the value
+        $this->isValid = null;
+        return $this;
+    }
+}
+
 ```
 
 ## Test
