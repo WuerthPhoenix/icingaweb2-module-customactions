@@ -2,6 +2,7 @@ CREATE TABLE `category` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `show_all_services` ENUM('yes', 'no') DEFAULT 'yes',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -19,8 +20,8 @@ CREATE TABLE `filter` (
 
 
 
-INSERT INTO `category` (`id`, `name`, `description`) VALUES
-(1, 'neteye_demo', 'NetEye Demo');
+INSERT INTO `category` (`id`, `name`, `description`, `show_all_services`) VALUES
+(1, 'neteye_demo', 'NetEye Demo', 'yes');
 
 
 INSERT INTO `filter` (`id`, `name`, `description`, `filter_host`, `filter_service`, `category_id`) VALUES
