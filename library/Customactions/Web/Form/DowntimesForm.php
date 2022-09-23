@@ -281,7 +281,8 @@ class DowntimesForm extends CustomactionsForm
         $addSharedPropertiesElements = true; //$this->filtersContainHost();
 
         if ($addSharedPropertiesElements) {
-            $sharedPropertiesElements[] =
+            if($this->category->getShowAllServices() == 'yes'){
+                $sharedPropertiesElements[] =
                 $this->createElement(
                     'baseCheckboxElement',
                     'all_services',
@@ -290,6 +291,7 @@ class DowntimesForm extends CustomactionsForm
                         'checked' => $this->getIcingaRequest()->getPost("all_services")
                     ]
                 );
+            }
 
             $sharedPropertiesElements[] =
                 $this->createElement(
