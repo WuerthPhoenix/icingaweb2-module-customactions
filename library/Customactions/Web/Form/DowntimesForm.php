@@ -155,7 +155,7 @@ class DowntimesForm extends CustomactionsForm
             }
 
             $mainPropertiesElements[] =
-                $this->createElementInColumns('baseCheckboxElement', 'filter' . $key, $attributes);
+                $this->createElementInColumns('customactionsCheckboxElement', 'filter' . $key, $attributes);
         }
         if (isset($mainPropertiesElements))
             $this->addElements($mainPropertiesElements);
@@ -200,7 +200,7 @@ class DowntimesForm extends CustomactionsForm
     protected function setSelectedFilters()
     {
         $values = $this->getValues();
-
+        
         $values = array_filter(
             $values,
             function ($value, $key) {
@@ -281,15 +281,17 @@ class DowntimesForm extends CustomactionsForm
         $addSharedPropertiesElements = true; //$this->filtersContainHost();
 
         if ($addSharedPropertiesElements) {
-            $sharedPropertiesElements[] =
+            if($this->category->getShowAllServices() == 'yes'){
+                $sharedPropertiesElements[] =
                 $this->createElement(
-                    'baseCheckboxElement',
+                    'customactionsCheckboxElement',
                     'all_services',
                     [
                         'label' => Translator::translate('All Services', 'monitoring'),
                         'checked' => $this->getIcingaRequest()->getPost("all_services")
                     ]
                 );
+            }
 
             $sharedPropertiesElements[] =
                 $this->createElement(
@@ -436,7 +438,7 @@ class DowntimesForm extends CustomactionsForm
         ];
 
         if ($objectType == DowntimePlannerUtil::TYPE_HOST) {
-            $requestBody['all_services'] = ($this->getValue("all_services") == 'n')? false: true;
+            $requestBody['all_services'] = ($this->getValue("all_services") == 'n' | $this->getValue("all_services") == '')? false: true;
             $requestBody['child_options'] = $this->getValue("child_hosts");
         }
 
