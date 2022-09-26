@@ -155,7 +155,7 @@ class DowntimesForm extends CustomactionsForm
             }
 
             $mainPropertiesElements[] =
-                $this->createElementInColumns('baseCheckboxElement', 'filter' . $key, $attributes);
+                $this->createElementInColumns('customactionsCheckboxElement', 'filter' . $key, $attributes);
         }
         if (isset($mainPropertiesElements))
             $this->addElements($mainPropertiesElements);
@@ -284,7 +284,7 @@ class DowntimesForm extends CustomactionsForm
             if($this->category->getShowAllServices() == 'yes'){
                 $sharedPropertiesElements[] =
                 $this->createElement(
-                    'baseCheckboxElement',
+                    'customactionsCheckboxElement',
                     'all_services',
                     [
                         'label' => Translator::translate('All Services', 'monitoring'),
