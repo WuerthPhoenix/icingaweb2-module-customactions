@@ -438,7 +438,7 @@ class DowntimesForm extends CustomactionsForm
         ];
 
         if ($objectType == DowntimePlannerUtil::TYPE_HOST) {
-            $requestBody['all_services'] = ($this->getValue("all_services") == 'n')? false: true;
+            $requestBody['all_services'] = ($this->getValue("all_services") == 'n' | $this->getValue("all_services") == '')? false: true;
             $requestBody['child_options'] = $this->getValue("child_hosts");
         }
 
