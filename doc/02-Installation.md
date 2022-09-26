@@ -46,6 +46,7 @@ chown apache:root ${TARGET_DIR}
 Put Extra Lib-File:
 ```
 cp LocalDateTimeElement.php /usr/share/icingaweb2/modules/ipl/vendor/ipl/html/src/FormElement/
+cp CustomactionsCheckboxElement.php /usr/share/icingaweb2/modules/neteye/library/Neteye/Web/Form/Element/
 ```
 
 Creating database and preparing it for access
@@ -128,33 +129,6 @@ Restart the php-fpm service and check if is still running
 ```bash
 systemctl restart php-fpm.service
 systemctl status php-fpm.service
-```
-
-## Bug warninig
-
-Currently a bug present in  neteye 4.25 where the value of the checkboxes is always set to checked.
-To fix this issue, go to " /usr/share/icingaweb2/modules/neteye/library/Neteye/Web/Form/Element/BaseCheckboxElement.php " and replace its content with 
-
-```bash
-<?php
-
-namespace Icinga\Module\Neteye\Web\Form\Element;
-
-use ipl\Html\FormElement\CheckboxElement;
-
-class BaseCheckboxElement extends CheckboxElement
-{
-    use BaseInputElement;
-    
-    public function setValue($value)
-    {
-        $this->value = $value;
-        // To validate the value
-        $this->isValid = null;
-        return $this;
-    }
-}
-
 ```
 
 ## Test
