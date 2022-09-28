@@ -1,4 +1,4 @@
-# Installation
+ Installation
 
 ## Requirements
 * Neteye (>= 4.15)
@@ -6,6 +6,13 @@
 	* Auditlog
 
 ## Installation
+
+For the configuration, `rpm-functions.sh` and `functions.sh` provided by `neteye_secure_install` will be used.
+
+```bash
+source /usr/share/neteye/secure_install/functions.sh
+source /usr/share/neteye/scripts/rpm-functions.sh
+```
 
 Declaring common variables and creating passwords
 
@@ -19,22 +26,27 @@ MODULE_DIR="/usr/share/icingaweb2/modules"
 TARGET_DIR="${MODULE_DIR}/${MODULE}"
 ```
 
-For the configuration, `rpm-functions.sh` and `functions.sh` provided by `neteye_secure_install` will be used.
-
-```bash
-source /usr/share/neteye/secure_install/functions.sh
-source /usr/share/neteye/scripts/rpm-functions.sh
-```
-
 Clone the repository to your local system and configure it
 
-```bash
-cd ${MODULE_DIR}
-git clone https://Dominik17@bitbucket.org/Dominik17/customactions.git
-chmod 755 customactions
-chown apache:root customactions
-cd customactions/
-mv LocalDateTimeElement.php /usr/share/icingaweb2/modules/ipl/vendor/ipl/html/src/FormElement/
+```
+git clone https://<username>@bitbucket.org/siwuerthphoenix/icingaweb2-module-customactions.git
+```
+Clone fomr Git:
+```
+git clone https://github.com/WuerthPhoenix/icingaweb2-module-customactions.git
+```
+Place into icingaweb2 modules folder:
+```
+mv icingaweb2-module-customactions/ ${TARGET_DIR}
+cd ${TARGET_DIR}
+chmod 755 ${TARGET_DIR}
+chown apache:root ${TARGET_DIR}
+```
+
+Put Extra Lib-File:
+```
+cp LocalDateTimeElement.php /usr/share/icingaweb2/modules/ipl/vendor/ipl/html/src/FormElement/
+cp CustomactionsCheckboxElement.php /usr/share/icingaweb2/modules/neteye/library/Neteye/Web/Form/Element/
 ```
 
 Creating database and preparing it for access
@@ -42,8 +54,10 @@ Creating database and preparing it for access
 ```bash
 cat <<EOF | mysql
 CREATE DATABASE $MODULE;
-GRANT SELECT, INSERT, UPDATE, DELETE, DROP, CREATE VIEW, INDEX, EXECUTE ON ${MODULE}.* TO '${MODULE}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';
-GRANT SELECT, INSERT, UPDATE, DELETE, DROP, CREATE VIEW, INDEX, EXECUTE ON ${MODULE}.* TO '${MODULE}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
+CREATE USER '${MODULE}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';
+CREATE USER '${MODULE}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
+GRANT ALL PRIVILEGES ON ${MODULE}.* TO '${MODULE}'@'localhost' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON ${MODULE}.* TO '${MODULE}'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 EOF
 ```
@@ -60,6 +74,7 @@ Create IcingaWeb2 Resource for database customactions and enabling module
 create_icingaweb2_db_resource ${MODULE} ${DB_PASSWORD}
 icingacli module enable ${MODULE}
 ```
+
 
 Configuring customactions api user
 
@@ -80,11 +95,24 @@ chmod 640 ${API_USER_DIR}/${MODULE}-user.conf
 chown icinga:icinga ${API_USER_DIR}/${MODULE}-user.conf
 ```
 
-a) Configuring api user resource in modules config file for api access
+Configuring api user resource in modules config file for api access
+Once created the icinga2 api user, restart the icinga2-master service
 
+In case of standalone:
+```
+systemctl restart icinga2-master.service
+```
+
+In case of cluster:
+```bash
+pcs resource restart icinga2-master
+```
+
+Install the config file:
 ```bash
 install -d -o apache -g icingaweb2 -m 770 "${CONFDIR}"
-
+cd ${CONFDIR}
+touch config.ini
 cat <<EOF > ${CONFDIR}/config.ini
 [apiuser]
 host = "icinga2-master.neteyelocal"
@@ -93,14 +121,11 @@ username = "${MODULE}"
 password = "${API_PASSWORD}"
 EOF
 
-chmod 660 ${CONFDIR}/config.ini
+chmod 660 ${CONFDIR}/config.ini;
 chown apache:icingaweb2 ${CONFDIR}/config.ini
 ```
 
-b) Currently you have to make step 9 with username and password of the director-api-user in the file `/neteye/shared/icinga2/conf/icinga2/conf.d/director-user.conf`. Also I'm not sure if the chown and chmod commands are neccessary.
-
 Restart the php-fpm service and check if is still running
-
 ```bash
 systemctl restart php-fpm.service
 systemctl status php-fpm.service

@@ -30,6 +30,17 @@ class CategoryModel extends BaseModel
     private $description;
 
     /**
+     * @var string $showAllServices
+     * @db_column
+     * @table_column
+     * @translate_label show all services option
+     * @form_input_type select
+     * @form_input_options_static yes, no
+     * @translate_tooltip decides if the all services downtime schedule option should be shown
+     */
+    private $showAllServices;
+
+    /**
      * Customer constructor.
      * @param int $id
      * @param string $name
@@ -38,11 +49,13 @@ class CategoryModel extends BaseModel
     public function __construct(
         int $id = null,
         string $name,
-        string $description = null
+        string $description = null,
+        string $showAllServices = null
     ){
         $this->setId($id);
         $this->setName($name);
         $this->setDescription($description);
+        $this->setShowAllServices($showAllServices);
     }
 
     /**
@@ -75,6 +88,22 @@ class CategoryModel extends BaseModel
     public function setDescription($description)
     {
         $this->description = $description;
+    }
+
+     /**
+     * @return string
+     */
+    public function getShowAllServices()
+    {
+        return $this->showAllServices;
+    }
+
+    /**
+     * @param string $showAllServices
+     */
+    public function setShowAllServices($showAllServices)
+    {
+        $this->showAllServices = $showAllServices;
     }
 
 }
