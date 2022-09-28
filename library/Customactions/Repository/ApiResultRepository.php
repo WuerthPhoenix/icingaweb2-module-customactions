@@ -4,7 +4,7 @@ namespace Icinga\Module\Customactions\Repository;
 
 use Icinga\Module\Customactions\Repository\DatabaselessRepository;
 
-class ApiErrorResultRepository extends DatabaselessRepository
+class ApiResultRepository extends DatabaselessRepository
 {
     const MODULE_NAME = 'customactions';
 
