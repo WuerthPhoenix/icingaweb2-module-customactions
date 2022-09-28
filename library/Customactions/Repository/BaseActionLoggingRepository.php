@@ -108,6 +108,12 @@ class BaseActionLoggingRepository extends BaseRepository
 
     protected function getAuditlogMessage(&$paramsToAuditlogFunctions)
     {
+        $newValues = $paramsToAuditlogFunctions['newValues']; // $newValues contains the values of a ScheduleDowntimeModel object
+        $filterName = $newValues['name'];
+        $statusCode = $newValues['status_code'];
+        $statusMessage = ($newValues['status_code'] === '200')? "Success ($statusCode)" : "Error ($statusCode): ".$newValues['message'];
+
+        $paramsToAuditlogFunctions['message'] = "<span class='activity'>$statusMessage</span> while scheduling downtime using filter \"$filterName\"";
     }
 
     protected function getAuditlogObjectUrl(&$paramsToAuditlogFunctions)
@@ -150,7 +156,7 @@ class BaseActionLoggingRepository extends BaseRepository
             'objectName' => '',
             'message' => ''
         ];
-
+        
         $this->getAuditlogObjectNameColumn($paramsToAuditlogFunctions);
         $this->getAuditlogUsername($paramsToAuditlogFunctions);
         $this->getAuditlogMessage($paramsToAuditlogFunctions);
